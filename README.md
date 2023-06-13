@@ -1,4 +1,5 @@
-# Online Voting System || **eVotingHub** 
+# Online Voting System || **eVotingHub** <p> <img src="logo.png" alt="Project Diagram" width="200" style="border: 1px solid black; border-radius: 10px;"> </p>
+
 
 The Online Voting System is a web-based application designed to facilitate secure and efficient voting processes for various elections, such as government elections, organizational elections, or opinion polls. The system aims to provide a convenient and reliable platform for voters to cast their votes remotely, ensuring transparency, accuracy, and integrity of the voting process.
 
