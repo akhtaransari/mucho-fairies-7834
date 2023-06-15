@@ -28,7 +28,7 @@ public class UI {
 	    public static final String WHITE = "\u001B[37m";
 		
 	
-	public static void menu(Scanner sc) {
+	public static void mainMenu(Scanner sc) {
 		int choice;
 		
 		do {
@@ -60,6 +60,34 @@ public class UI {
 
 	private static void voterUI(Scanner sc) {
 		
+//		Register for a voter account by providing necessary personal information and verification.
+//		2. Log in to the voter account using the registered credentials.
+//		3. View upcoming elections and candidate profiles, including their background and
+//		proposed agenda.
+//		4. Cast votes securely and anonymously for the desired candidates or options.
+//		5. Receive confirmation and acknowledgment of the successfully cast vote.
+//		6. View personal voting history and participation in past elections.
+		int choice;
+		do {
+			System.out.println(YELLOW+"╔══════════════════════════════╗");
+			System.out.println("║        Voter Menu            ║");
+			System.out.println("╚══════════════════════════════╝");
+			System.out.println("╔══════════════════════════════╗");
+			System.out.println("║ 1. Admin Login               ║");
+			System.out.println("║ 4. View Election Results     ║");
+			System.out.println("║ 0. Exit                      ║");
+			System.out.println("╚══════════════════════════════╝" + RESET);
+			
+		choice = sc.nextInt();
+		
+			switch (choice) {
+			case 1 -> adminUI(sc);
+			case 2 -> voterUI(sc);
+			case 3 -> viewEletionResultsUI(sc);
+			case 4 -> viewEletionResultsUI(sc);
+			default -> System.out.println();
+			}
+		} while (choice != 0);
 	}
 
 	private static void viewEletionResultsUI(Scanner sc) {
