@@ -13,7 +13,7 @@ public class App{
     	System.out.println("\u001B[32m"+"╔══════════════════════════════╗");
 		System.out.println("║         eVotingHub           ║");
 		System.out.println("╚══════════════════════════════╝"+"\u001B");
-		UI.menu(scanner);	
+		UI.mainMenu(scanner);	
 		System.out.println("╔══════════════════════════════╗");
 		System.out.println("║   	Thanking You	       ║");
 		System.out.println("╚══════════════════════════════╝");
