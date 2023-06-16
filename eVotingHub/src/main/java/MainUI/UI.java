@@ -73,22 +73,42 @@ public class UI {
 			System.out.println("║        Voter Menu            ║");
 			System.out.println("╚══════════════════════════════╝");
 			System.out.println("╔══════════════════════════════╗");
-			System.out.println("║ 1. Admin Login               ║");
-			System.out.println("║ 4. View Election Results     ║");
+			System.out.println("║ 1. View Election Results     ║");
+			System.out.println("║ 2. View Candidate            ║");
+			System.out.println("║ 3. Cast Votes                ║");
+			System.out.println("║ 4. Vote confirmation         ║");
+			System.out.println("║ 5. View Voting History       ║");
 			System.out.println("║ 0. Exit                      ║");
 			System.out.println("╚══════════════════════════════╝" + RESET);
 			
 		choice = sc.nextInt();
 		
 			switch (choice) {
-			case 1 -> adminUI(sc);
-			case 2 -> voterUI(sc);
-			case 3 -> viewEletionResultsUI(sc);
-			case 4 -> viewEletionResultsUI(sc);
+			case 1 -> viewEletionResultsUI(sc);
+			case 2 -> createCandidateUI(sc);
+			case 3 -> castVote(sc);
+			case 4 -> voteConfirmationUI(sc);
+			case 5 -> viewVotingHistoryUI(sc);
 			default -> System.out.println();
 			}
 		} while (choice != 0);
 	}
+
+	private static void viewVotingHistoryUI(Scanner sc) {
+	
+	}
+
+
+	private static void castVote(Scanner sc) {
+		
+		
+	}
+
+
+	private static void voteConfirmationUI(Scanner sc) {
+		
+	}
+
 
 	private static void viewEletionResultsUI(Scanner sc) {
 		
