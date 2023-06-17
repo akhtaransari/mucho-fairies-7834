@@ -10,7 +10,7 @@ public class Vote {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-    private int voterId;
+    private String voterEmail;
     private int candidateId;
     private int electionId;
     
@@ -18,16 +18,16 @@ public class Vote {
 		super();
 	}
 
-	public Vote(int voterId, int candidateId, int electionId) {
+	public Vote(String voterEmail, int candidateId, int electionId) {
 		super();
-		this.voterId = voterId;
+		this.voterEmail = voterEmail;
 		this.candidateId = candidateId;
 		this.electionId = electionId;
 	}
 
 	@Override
 	public String toString() {
-		return "Vote [id=" + id + ", voterId=" + voterId + ", candidateId=" + candidateId + ", electionId=" + electionId
+		return "Vote [id=" + id + ", voterId=" + voterEmail + ", candidateId=" + candidateId + ", electionId=" + electionId
 				+ "]";
 	}
 
@@ -35,12 +35,12 @@ public class Vote {
 		return id;
 	}
 
-	public int getVoterId() {
-		return voterId;
+	public String getVoterId() {
+		return voterEmail;
 	}
 
-	public void setVoterId(int voterId) {
-		this.voterId = voterId;
+	public void setVoterId(String voterEmail) {
+		this.voterEmail = voterEmail;
 	}
 
 	public int getCandidateId() {

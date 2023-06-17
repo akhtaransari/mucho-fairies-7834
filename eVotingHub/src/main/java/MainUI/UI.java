@@ -1,8 +1,12 @@
 package MainUI;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import com.eVotingHub.dto.Candidate;
+import com.eVotingHub.dto.Election;
+import com.eVotingHub.dto.Vote;
+import com.eVotingHub.dto.Voter;
 import com.eVotingHub.exceptions.AccessForbidden;
 import com.eVotingHub.exceptions.DuplicateEntry;
 import com.eVotingHub.exceptions.InvalidCredentials;
@@ -15,7 +19,7 @@ import com.eVotingHub.exceptions.WrongInput;
 import com.eVotingHub.services.OnlineVotingImplements;
 
 public class UI {
-
+	
 	    // ANSI escape codes for text colors
 	    public static final String RESET = "\u001B[0m";
 	    public static final String BLACK = "\u001B[30m";
@@ -26,6 +30,7 @@ public class UI {
 	    public static final String PURPLE = "\u001B[35m";
 	    public static final String CYAN = "\u001B[36m";
 	    public static final String WHITE = "\u001B[37m";
+	    static OnlineVotingImplements onlineVotingImplements = new OnlineVotingImplements();
 		
 	
 	public static void mainMenu(Scanner sc) {
@@ -40,6 +45,7 @@ public class UI {
 			System.out.println("║ 2. Voter Login               ║");
 			System.out.println("║ 3. View Elections            ║");
 			System.out.println("║ 4. View Election Results     ║");
+			System.out.println("║ 5. Voter Registration        ║");
 			System.out.println("║ 0. Exit                      ║");
 			System.out.println("╚══════════════════════════════╝" + RESET);
 			
@@ -47,9 +53,10 @@ public class UI {
 		
 			switch (choice) {
 			case 1 -> adminUI(sc);
-			case 2 -> voterUI(sc);
+			case 2 -> voterLoginUI(sc);
 			case 3 -> viewEletionResultsUI(sc);
 			case 4 -> viewEletionResultsUI(sc);
+			case 5 -> registerVoter(sc);
 			default -> System.out.println();
 			}
 		} while (choice != 0);
@@ -58,15 +65,45 @@ public class UI {
 	}
 	
 
-	private static void voterUI(Scanner sc) {
+	private static void registerVoter(Scanner sc) {
+		System.out.println("Enter firstName");
+		String fisrtName = sc.next();
+		System.out.println("Enter lastName");
+		String lasttName = sc.next();
+		System.out.println("Enter age");
+		int age = sc.nextInt();
+		System.out.println("Enter E-mail");
+		String email = sc.next();
+		System.out.println("Enter password");
+		String password = sc.next();
 		
-//		Register for a voter account by providing necessary personal information and verification.
-//		2. Log in to the voter account using the registered credentials.
-//		3. View upcoming elections and candidate profiles, including their background and
-//		proposed agenda.
-//		4. Cast votes securely and anonymously for the desired candidates or options.
-//		5. Receive confirmation and acknowledgment of the successfully cast vote.
-//		6. View personal voting history and participation in past elections.
+		try {
+			System.out.println(onlineVotingImplements.registerVoter(new Voter(fisrtName , lasttName,age, email, password)) ? "Succesfull" : "not Succesfull");
+		} catch (AccessForbidden | InvalidCredentials | NoRecordFound | UnauthorizedAccess | UserMustBe18orAbove
+				| SomeThingWentWrong | DuplicateEntry e) {
+			System.out.println(e.getMessage());
+			
+		}
+			
+		
+	}
+
+
+	private static void voterLoginUI(Scanner sc) {
+		System.out.println("Enter Username");
+		String username = sc.next();
+		System.out.println("Enter Password");
+		String password = sc.next();
+		try {
+			voterMenu(sc,onlineVotingImplements.loginVoter(username, password));
+		} catch (AccessForbidden | InvalidCredentials | MaximumLoginAttemptReached | NoRecordFound | UnauthorizedAccess
+				| SomeThingWentWrong e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
+	private static void voterMenu(Scanner sc , Voter voter) {
 		int choice;
 		do {
 			System.out.println(YELLOW+"╔══════════════════════════════╗");
@@ -86,32 +123,65 @@ public class UI {
 			switch (choice) {
 			case 1 -> viewEletionResultsUI(sc);
 			case 2 -> createCandidateUI(sc);
-			case 3 -> castVote(sc);
-			case 4 -> voteConfirmationUI(sc);
-			case 5 -> viewVotingHistoryUI(sc);
+			case 3 -> castVote(sc,voter);
+			case 4 -> voteConfirmationUI(sc,voter);
+			case 5 -> viewVotingHistoryUI(voter.getEmail());
 			default -> System.out.println();
 			}
 		} while (choice != 0);
 	}
 
-	private static void viewVotingHistoryUI(Scanner sc) {
-	
+	private static void viewVotingHistoryUI(String email) {
+		
+		try {
+			onlineVotingImplements.viewVotingHistory(email).forEach(i-> System.out.println(i));
+		} catch (AccessForbidden | DuplicateEntry | NoRecordFound | UnauthorizedAccess | SomeThingWentWrong
+				| WrongInput e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 
-	private static void castVote(Scanner sc) {
+	private static void castVote(Scanner sc , Voter voter) {
+		System.out.println("Enter CandidateID");
+		int candidateID = sc.nextInt();
+		System.out.println("Enter electionID");
+		int electionid = sc.nextInt();
+		Vote vote = new Vote(voter.getEmail(), candidateID, electionid);
 		
+		try {
+			onlineVotingImplements.castVote(vote);
+		} catch (AccessForbidden | DuplicateEntry | NoRecordFound | UnauthorizedAccess | SomeThingWentWrong
+				| WrongInput e) {
+			System.out.println(e.getMessage());
+		}
 		
 	}
 
 
-	private static void voteConfirmationUI(Scanner sc) {
+	private static void voteConfirmationUI(Scanner sc , Voter voter) {
+
+		System.out.println("Enter electionID");
+		int electionid = sc.nextInt();
+		try {
+			System.out.println(onlineVotingImplements.voteConfirmation(voter.getEmail(),electionid) ? "Succesfull" : "Not Succesfull");
+		} catch (AccessForbidden | DuplicateEntry | NoRecordFound | UnauthorizedAccess | SomeThingWentWrong
+				| WrongInput e) {
+			System.out.println(e.getMessage());
+		}
+		
 		
 	}
 
 
 	private static void viewEletionResultsUI(Scanner sc) {
-		
+		System.out.println("Enter Election ID");
+		try {
+			onlineVotingImplements.electionResult(sc.nextInt()).forEach(System.out::println);
+		} catch (AccessForbidden | DuplicateEntry | NoRecordFound | UnauthorizedAccess | SomeThingWentWrong
+				| WrongInput e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private static void adminUI(Scanner sc) {
@@ -123,7 +193,6 @@ public class UI {
 		System.out.println("║        Enter Password        ║");
 		System.out.println("╚══════════════════════════════╝"+RESET);
 		String	passwordString = sc.next();
-		OnlineVotingImplements onlineVotingImplements = new OnlineVotingImplements();
 		try {
 			if (onlineVotingImplements.loginAdministrator(usernameString, passwordString)) adminMenuUI(sc);
 		} catch (AccessForbidden | InvalidCredentials | MaximumLoginAttemptReached | NoRecordFound | UnauthorizedAccess
@@ -145,6 +214,8 @@ public class UI {
 			System.out.println("║ 1. Create Candidate          ║");
 			System.out.println("║ 2. Update Candidate          ║");
 			System.out.println("║ 3. Delete Candidate          ║");
+			System.out.println("║ 4. Create Elections          ║");
+			System.out.println("║ 5. View Candidates           ║");
 			System.out.println("║ 0. Exit                      ║");
 			System.out.println("╚══════════════════════════════╝" + RESET);
 
@@ -154,6 +225,8 @@ public class UI {
 			case 1 -> createCandidateUI(sc);
 			case 2 -> updateCandidateUI(sc);
 			case 3 -> deleteCandidateUI(sc);
+			case 4 -> createElectionUI(sc);
+			
 			}
 			
 		} while (choice != 0);
@@ -161,7 +234,30 @@ public class UI {
 	}
 
 
+	private static void createElectionUI(Scanner sc) {
+		
+		System.out.println("Enter Candidtate ID");
+		int candidateid = sc.nextInt();
+		System.out.println("Enter Election Name");
+		sc.nextLine();
+	    String electionNameString = sc.nextLine();
+	    System.out.println("Enter Election Start Date");
+	    LocalDate startDate = LocalDate.parse(sc.next());
+	    System.out.println("Enter Election End Date");
+	    LocalDate endDate = LocalDate.parse(sc.next());
+	    
+	    try {
+	    	System.out.println(onlineVotingImplements.addElection(new Election(candidateid,electionNameString, startDate, endDate)) ? "Election Created" : "");
+		} catch (AccessForbidden | DuplicateEntry | NoRecordFound | UnauthorizedAccess | SomeThingWentWrong
+				| WrongInput e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
 	private static void updateCandidateUI(Scanner sc) {
+		System.out.println("Enter ID");
+		int id = sc.nextInt();
 		System.out.println("Enter First Name");
 		String fisrtName = sc.next();
 		System.out.println("Enter Last Name");
@@ -171,14 +267,13 @@ public class UI {
 	    String profile = sc.nextLine();
 	    System.out.println("Enter Vvoting Agenda");
 	    String agenda = sc.nextLine();
-	    
-	    OnlineVotingImplements onlineVotingImplements = new OnlineVotingImplements();
-	    Candidate candidate = new Candidate(fisrtName, lastName, profile, agenda);
+	  
+	    Candidate candidate = new Candidate(id,fisrtName, lastName, profile, agenda);
 	    try {
 			if (onlineVotingImplements.updateCandidateProfile(candidate))System.out.println("Cadidate Updated");
 		} catch (AccessForbidden | DuplicateEntry | NoRecordFound | SomeThingWentWrong | UserMustBe18orAbove
 				| WrongInput e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -194,25 +289,23 @@ public class UI {
 	    System.out.println("Enter Vvoting Agenda");
 	    String agenda = sc.nextLine();
 	    
-	    OnlineVotingImplements onlineVotingImplements = new OnlineVotingImplements();
 	    Candidate candidate = new Candidate(fisrtName, lastName, profile, agenda);
 	    try {
 			if (onlineVotingImplements.createCandidateProfile(candidate))System.out.println("Cadidate Added");
 		} catch (AccessForbidden | DuplicateEntry | NoRecordFound | SomeThingWentWrong | UserMustBe18orAbove
 				| WrongInput e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
 
 	private static void deleteCandidateUI(Scanner sc) {
 		System.out.println("Enter Candidate ID");
-		OnlineVotingImplements onlineVotingImplements = new OnlineVotingImplements();
 		try {
 			if (onlineVotingImplements.deleteCandidateProfile(sc.nextInt())) System.out.println("Cadidate Deleted");
 		} catch (AccessForbidden | DuplicateEntry | InvalidCredentials | MaximumLoginAttemptReached | NoRecordFound
 				| UnauthorizedAccess | SomeThingWentWrong | UserMustBe18orAbove | WrongInput e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <!-- Other logging configuration -->
+
+  <Loggers>
+    <!-- Hibernate -->
+    <Logger name="org.hibernate" level="WARN"/>
+    <!-- Other loggers -->
+  </Loggers>
+
+  <!-- Appenders, log formats, etc. -->
+</Configuration>

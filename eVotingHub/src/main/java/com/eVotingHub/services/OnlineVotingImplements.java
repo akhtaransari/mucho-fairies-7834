@@ -24,8 +24,12 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 
 	@Override
 	public boolean registerVoter(Voter voter) throws AccessForbidden, InvalidCredentials, NoRecordFound,
-			UnauthorizedAccess, UserMustBe18orAbove, SomeThingWentWrong {
+			UnauthorizedAccess, UserMustBe18orAbove, SomeThingWentWrong, DuplicateEntry {
 		// TODO Auto-generated method stub
+		
+		if (voter.getAge() < 17) {
+			throw new UserMustBe18orAbove("User is Not Above 18");
+		}
 		return votingSystemImplements.registerVoter(voter);
 		
 	}
@@ -33,7 +37,16 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 	@Override
 	public Voter loginVoter(String email, String password) throws AccessForbidden, InvalidCredentials,
 			MaximumLoginAttemptReached, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong {
-		return votingSystemImplements.loginVoter(email, password);
+		voterLoginCounter++;
+		Voter voter = votingSystemImplements.loginVoter(email,password);
+		if (voterLoginCounter > 3) {
+			throw new MaximumLoginAttemptReached("You have Atempted more then 3 time ");
+		}else if (voter != null) {
+			voterLoginCounter = 0;
+		}else {
+			throw new InvalidCredentials("Wrong Username and Password Provided");
+		}
+		return voter;
 	}
 
 	@Override
@@ -45,11 +58,13 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 	public boolean castVote(Vote vote)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
 		if (votingSystemImplements.castVote(vote) )return true;
-		return false;
+		else throw new NoRecordFound("Record Not Found");
 	}
 
+	
+	// This is pending
 	@Override
-	public List<String> viewVotingHistory(int voterId)
+	public List<String> viewVotingHistory(String emailID)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
 
 		return null;
@@ -74,33 +89,48 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 	@Override
 	public boolean createCandidateProfile(Candidate candidate)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, SomeThingWentWrong, UserMustBe18orAbove, WrongInput {
-		if (votingSystemImplements.createCandidate(candidate)){
-			return true;
-		}else {
-			return false;
-		}
+		
+		if (votingSystemImplements.createCandidate(candidate)) return true;
+		else throw new SomeThingWentWrong("Some Thing Went Wrong");
 		
 	}
 
 	@Override
 	public boolean updateCandidateProfile(Candidate candidate)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, SomeThingWentWrong, UserMustBe18orAbove, WrongInput {
-		if (votingSystemImplements.updateCandidate(candidate)){
-			return true;
-		}else {
-			return false;
-		}
+		if (votingSystemImplements.updateCandidate(candidate)) return true;
+		else throw new SomeThingWentWrong("Some Thing Went Wrong");
 	}
 
 	@Override
 	public boolean deleteCandidateProfile(int candidateId) 
 			throws AccessForbidden, DuplicateEntry, InvalidCredentials, MaximumLoginAttemptReached, NoRecordFound,
 			UnauthorizedAccess, SomeThingWentWrong, UserMustBe18orAbove, WrongInput {
-		if (votingSystemImplements.deleteCandidate(candidateId)){
-			return true;
-		}else {
-			return false;
-		}
+		if (votingSystemImplements.deleteCandidate(candidateId)) return true;
+		else throw new SomeThingWentWrong("Some Thing Went Wrong");
+	}
+
+	@Override
+	public boolean voteConfirmation(String email, int electionId)
+			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
+		if (votingSystemImplements.voteConfirmation(email ,electionId)) return true;
+		throw new SomeThingWentWrong("Something went Wrong");
+	}
+	
+	// This is pending
+	@Override
+	public List<String> electionResult(int electionId)
+			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addElection(Election election)
+			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
+		if (votingSystemImplements.addElection(election)) return true;
+		throw new SomeThingWentWrong("Something went Wrong");
+		
 	}
 	
 }
