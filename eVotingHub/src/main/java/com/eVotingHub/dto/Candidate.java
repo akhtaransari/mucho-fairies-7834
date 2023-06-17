@@ -27,6 +27,16 @@ public class Candidate {
 		this.profile = profile;
 		this.agenda = agenda;
 	}
+	
+	
+	public Candidate(int id, String firstName, String lastName, String profile, String agenda) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.profile = profile;
+		this.agenda = agenda;
+	}
 
 	@Override
 	public String toString() {
