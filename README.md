@@ -75,6 +75,8 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contributions
 
 Contributions to the project are welcome. If you find any issues or have suggestions for improvements, please create an issue or submit a pull request.
+## ER Diagram
+<p> <img src="ER_DiaGram.png" alt="Project Diagram" width="800" style="border: 1px solid black; border-radius: 10px;"> </p>
 
 ## Acknowledgments
 
