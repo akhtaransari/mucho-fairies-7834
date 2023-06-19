@@ -8,11 +8,11 @@ import jakarta.persistence.Id;
 @Entity
 public class Voter {
 
-	private String fisrtName;
+	@Id
+	private String email;
+	private String firsttName;
     private String lastName;
     private int age;
-    @Id
-    private String email;
     private String password;
     
     public Voter() {
@@ -21,7 +21,7 @@ public class Voter {
 
 	public Voter(String fisrtName, String lastName, int age, String email, String password) {
 		super();
-		this.fisrtName = fisrtName;
+		this.firsttName = fisrtName;
 		this.lastName = lastName;
 		this.age = age;
 		this.email = email;
@@ -30,13 +30,13 @@ public class Voter {
 
 	@Override
 	public String toString() {
-		return "Voter [fisrtName=" + fisrtName + ", lastName=" + lastName + ", age=" + age + ", email="
+		return "Voter [fisrtName=" + firsttName + ", lastName=" + lastName + ", age=" + age + ", email="
 				+ email + ", password=" + password + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(age, email, fisrtName, lastName, password);
+		return Objects.hash(age, email, firsttName, lastName, password);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class Voter {
 		if (getClass() != obj.getClass())
 			return false;
 		Voter other = (Voter) obj;
-		return age == other.age && Objects.equals(email, other.email) && Objects.equals(fisrtName, other.fisrtName)
+		return age == other.age && Objects.equals(email, other.email) && Objects.equals(firsttName, other.firsttName)
 				&& Objects.equals(lastName, other.lastName)
 				&& Objects.equals(password, other.password);
 	}
@@ -56,11 +56,11 @@ public class Voter {
 	
 
 	public String getFisrtName() {
-		return fisrtName;
+		return firsttName;
 	}
 
 	public void setFisrtName(String fisrtName) {
-		this.fisrtName = fisrtName;
+		this.firsttName = fisrtName;
 	}
 
 	public String getLastName() {

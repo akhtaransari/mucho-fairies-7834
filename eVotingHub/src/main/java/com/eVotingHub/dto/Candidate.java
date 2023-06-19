@@ -1,11 +1,15 @@
 package com.eVotingHub.dto;
 
-import java.util.Objects;
+import 
+java.util.Objects;
 
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+
 @Entity
 public class Candidate {
 	@Id
@@ -28,16 +32,6 @@ public class Candidate {
 		this.agenda = agenda;
 	}
 	
-	
-	public Candidate(int id, String firstName, String lastName, String profile, String agenda) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.profile = profile;
-		this.agenda = agenda;
-	}
-
 	@Override
 	public String toString() {
 		return "Candidate [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", profile=" + profile

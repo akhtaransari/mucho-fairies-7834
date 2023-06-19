@@ -2,95 +2,103 @@ package com.eVotingHub.dto;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Objects;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Election{
 	
 	@Id
-	private int candidateid;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int electionID;
     private String electionName;
     private LocalDate startDate;
     private LocalDate endDate;
+   
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Candidate> candidates = new ArrayList<>();
 	
-    public Election() {
-    	super();
+	public Election() {
+		super();
 	}
 
-    public Election(int candidateid, String electionName, LocalDate startDate, LocalDate endDate) {
+	@Override
+	public String toString() {
+		return "Election [electionID=" + electionID + ", electionName=" + electionName + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", candidates=" + candidates + "]";
+	}
+
+	public Election(int electionID, String electionName, LocalDate startDate, LocalDate endDate) {
 		super();
-		this.candidateid = candidateid;
+		this.electionID = electionID;
 		this.electionName = electionName;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 
-
-
-
-
-	@Override
-	public String toString() {
-		return "Election [id=" + candidateid + ", electionName=" + electionName + ", startDate=" + startDate + ", endDate=" + endDate + "]";
+	public Election(String electionName, LocalDate startDate, LocalDate endDate) {
+		super();
+		this.electionName = electionName;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(endDate, candidateid, electionName, startDate);
+	public Election(String electionName, LocalDate startDate, LocalDate endDate, List<Candidate> candidates) {
+		super();
+		this.electionName = electionName;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.candidates = candidates;
 	}
 
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Election other = (Election) obj;
-		return Objects.equals(endDate, other.endDate) && candidateid == other.candidateid && Objects.equals(electionName, other.electionName)
-				&& Objects.equals(startDate, other.startDate);
+	public int getElectionID() {
+		return electionID;
 	}
 
-
-	public int getId() {
-		return candidateid;
+	public void setElectionID(int electionID) {
+		this.electionID = electionID;
 	}
-	
-	public String getelectionName() {
+
+	public String getElectionName() {
 		return electionName;
 	}
 
-
-	public void setelectionName(String electionName) {
+	public void setElectionName(String electionName) {
 		this.electionName = electionName;
 	}
-
 
 	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
-
 
 	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
+
+	public List<Candidate> getCandidates() {
+		return candidates;
+	}
+
+	public void setCandidates(List<Candidate> candidates) {
+		this.candidates = candidates;
+	}
     
+
     
     
 }

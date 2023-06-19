@@ -1,5 +1,7 @@
 package com.eVotingHub.dao;
 
+
+
 import java.util.List;
 
 import com.eVotingHub.dto.Candidate;
@@ -59,123 +61,154 @@ public class VotingSystemDaoImplements  implements VotingSystemDao{
 		}
 		throw new InvalidCredentials("Username or Password mismatch");
 	}
-
+	
 	@Override
-	public List<Election> viewUpcomingElections() throws AccessForbidden, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong {
-		return null;
+	public List<Vote> viewVotingHistory(String emailID)
+			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
+		EntityManager em = DBConnection.getEM();
+		List<Vote>  votes = null;
+		try {
+			votes = em.createQuery("SELECT c FROM Vote c").getResultList();
+			em.close();
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
+		if (votes == null) {
+			em.close();
+			throw new NoRecordFound("No record Found");
+		}
+		return votes;
 	}
 
 	@Override
-	public boolean castVote(Vote vote)
+	public boolean addElection(Election election ,List<Candidate> list)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
-		// TODO Auto-generated method stub
+		EntityManager em = DBConnection.getEM();
+		
+		Election e = new Election();
+		e.setElectionName(election.getElectionName());
+		e.setStartDate(election.getStartDate());
+		e.setEndDate(election.getEndDate());
+		
+		
+		 for (int i = 0 ; i< list.size();i++) {
+			 election.getCandidates().add(list.get(i));
+		 }
+		try {
+			em.getTransaction().begin();
+			em.persist(e);
+			em.getTransaction().commit();
+			em.close();
+			return true;
+		} catch (PersistenceException es) {
+			em.close();
+			es.printStackTrace();
+		}
 		return false;
 	}
 
 	@Override
-	public List<Vote> viewVotingHistory(int voterId)
+	public boolean deleteElection(int id)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
-		// TODO Auto-generated method stub
-		
-		return null;
-	}
-
-	@Override
-	public boolean createCandidate(Candidate candidate)
-			throws AccessForbidden, DuplicateEntry, NoRecordFound, SomeThingWentWrong, UserMustBe18orAbove, WrongInput {
-		// TODO Auto-generated method stub
-		
 		EntityManager em = DBConnection.getEM();
+		Election election2 = null;
+		election2 = em.find(Election.class,id);
+		
+		if (election2 == null) {
+			em.close();
+			throw new NoRecordFound("No Election Found");
+		}
 		try {
 			em.getTransaction().begin();
-			em.persist(candidate);
+			em.remove(election2);
 			em.getTransaction().commit();
 			em.close();
 			return true;
 		} catch (PersistenceException e) {
-			em.close();
-			throw new SomeThingWentWrong("Some Thing Went Wrong");
-		}
-		
-		
-	}
-
-	@Override
-	public boolean updateCandidate(Candidate candidate)
-			throws AccessForbidden, DuplicateEntry, NoRecordFound, SomeThingWentWrong, UserMustBe18orAbove, WrongInput {
-		EntityManager em = DBConnection.getEM();
-		Candidate find = em.find(Candidate.class,candidate.getId());
-		
-		if (find == null) {
-			em.close();
-			throw new NoRecordFound("No Candidate found");
-		}
-		
-		try {
-			em.getTransaction().begin();
-			find.setAgenda(candidate.getAgenda());
-			find.setFirstName(candidate.getFirstName());
-			find.setLastName(candidate.getLastName());
-			find.setProfile(candidate.getProfile());
-			em.getTransaction().commit();
-			em.close();
-			return true;
-		} catch (PersistenceException e) {
+			em.getTransaction().rollback();
 			em.close();
 			throw new SomeThingWentWrong("Some Thing Went Wrong");
 		}
 	}
 
 	@Override
-	public boolean deleteCandidate(int candidateId)
-			throws AccessForbidden, DuplicateEntry, InvalidCredentials, MaximumLoginAttemptReached, NoRecordFound,
-			UnauthorizedAccess, SomeThingWentWrong, UserMustBe18orAbove, WrongInput {
+	public boolean updateElection(Election election, List<Candidate> list)
+			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
 		EntityManager em = DBConnection.getEM();
-		Candidate find = em.find(Candidate.class,candidateId);
-		if (find == null) {
-			em.close();
-			throw new NoRecordFound("No Candidate found");
-		}
+		Election election2 = null;
+		election2 = em.find(Election.class,election.getElectionID());
 		
+		if (election2 == null) {
+			em.close();
+			throw new NoRecordFound("No Election Found");
+		}
 		try {
 			em.getTransaction().begin();
-			em.remove(find);
+			election2.setElectionName(election.getElectionName());
+			election2.setStartDate(election.getStartDate());
+			election2.setEndDate(election.getEndDate());
+			 for (int i = 0 ; i< list.size();i++) {
+				 election2.getCandidates().add(list.get(i));
+			 }
 			em.getTransaction().commit();
 			em.close();
 			return true;
-		} catch (PersistenceException e) {
+		} catch (PersistenceException es) {
 			em.close();
-			throw new SomeThingWentWrong("Some Thing Went Wrong");
+			es.printStackTrace();
 		}
-		
+		return false;		
 	}
-
+	
+	//Pending
 	@Override
 	public boolean voteConfirmation(String email, int electionID)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
 		return false;
 	}
-
+	
 	@Override
-	public boolean addElection(Election election)
+	public List<Election> viewElections()
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
 		EntityManager em = DBConnection.getEM();
-		Election find = em.find(Election.class,election.getId());
-		if (find != null) {
-			em.close();
-			throw new NoRecordFound("Election Already Exists");
-		}
-		
+		List<Election> list = null;
 		try {
-			em.getTransaction().begin();
-			em.persist(election);
-			em.getTransaction().commit();
+			list = em.createQuery("SELECT c FROM Election c").getResultList();
+			if (list == null) {
+				em.close();
+				throw new NoRecordFound("No record Found");
+			}
 			em.close();
-			return true;
+			return list;
 		} catch (PersistenceException e) {
-			em.close();
-			throw new SomeThingWentWrong("Some Thing Went Wrong");
+			e.printStackTrace();
 		}
+		return list;
+	}
+	//Pending
+	@Override
+	public boolean castVote(Vote vote)
+				throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
+	
+		return false;
 	}
 
+	@Override
+	public List<Candidate> viewCandidates()
+			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
+		EntityManager em = DBConnection.getEM();
+		List<Candidate> list = null;
+		try {
+			list = em.createQuery("SELECT c FROM Candidate c").getResultList();
+			if (list == null) {
+				em.close();
+				throw new NoRecordFound("No record Found");
+			}
+			em.close();
+			return list;
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }
