@@ -20,16 +20,16 @@ public interface OnlineVotingServices {
 
 	boolean registerVoter(Voter voter) 								throws AccessForbidden , InvalidCredentials  ,NoRecordFound, UnauthorizedAccess, UserMustBe18orAbove , SomeThingWentWrong , DuplicateEntry;
     Voter loginVoter(String email, String password) 				throws AccessForbidden , InvalidCredentials ,MaximumLoginAttemptReached ,NoRecordFound, UnauthorizedAccess ,SomeThingWentWrong;
-    List<Election> viewUpcomingElections() 							throws AccessForbidden  ,NoRecordFound, UnauthorizedAccess , SomeThingWentWrong;
     boolean castVote(Vote vote) 									throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
-    List<String> viewVotingHistory(String emailID)					throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
+    List<Vote> viewVotingHistory(String emailID)					throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
     boolean voteConfirmation(String email, int electionId) 			throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
-    List<String> electionResult(int electionId)									throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
-     
-    boolean addElection(Election election) 							throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
+    List<String> electionResult(int electionId)						throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
+    List<Election> viewElections() 									throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
+    List<Candidate> viewCandidates() 									throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
+    boolean addElection(Election election,List<Candidate> list)		throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
     boolean loginAdministrator(String username, String password) 	throws AccessForbidden , InvalidCredentials ,MaximumLoginAttemptReached ,NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
-    boolean createCandidateProfile(Candidate candidate) 			throws AccessForbidden ,DuplicateEntry ,NoRecordFound, SomeThingWentWrong ,UserMustBe18orAbove , WrongInput;
-    boolean updateCandidateProfile(Candidate candidate) 			throws AccessForbidden ,DuplicateEntry ,NoRecordFound, SomeThingWentWrong ,UserMustBe18orAbove , WrongInput;
-    boolean deleteCandidateProfile(int candidateId) 				throws AccessForbidden ,DuplicateEntry ,InvalidCredentials ,MaximumLoginAttemptReached ,NoRecordFound, UnauthorizedAccess , SomeThingWentWrong ,UserMustBe18orAbove , WrongInput;
+    boolean deleteElection(int id)									throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
+    boolean updateElection(Election election,List<Candidate> list)	throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
+    
 
 }
