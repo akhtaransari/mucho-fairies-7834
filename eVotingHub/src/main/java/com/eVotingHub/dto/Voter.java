@@ -1,6 +1,5 @@
 package com.eVotingHub.dto;
 
-import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,85 +14,100 @@ public class Voter {
     private int age;
     private String password;
     
+    private boolean HasVoted;
+    
     public Voter() {
 		super();
 	}
 
-	public Voter(String fisrtName, String lastName, int age, String email, String password) {
+    
+    public Voter(String email, String firsttName, String lastName, int age, String password) {
 		super();
-		this.firsttName = fisrtName;
+		this.email = email;
+		this.firsttName = firsttName;
 		this.lastName = lastName;
 		this.age = age;
-		this.email = email;
 		this.password = password;
 	}
+    
+	public Voter(String email, String firsttName, String lastName, int age, String password, boolean hasVoted) {
+		super();
+		this.email = email;
+		this.firsttName = firsttName;
+		this.lastName = lastName;
+		this.age = age;
+		this.password = password;
+		HasVoted = hasVoted;
+	}
+
 
 	@Override
 	public String toString() {
-		return "Voter [fisrtName=" + firsttName + ", lastName=" + lastName + ", age=" + age + ", email="
-				+ email + ", password=" + password + "]";
+		return "Voter [email=" + email + ", firsttName=" + firsttName + ", lastName=" + lastName + ", age=" + age
+				+ ", password=" + password + ", HasVoted=" + HasVoted + "]";
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(age, email, firsttName, lastName, password);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Voter other = (Voter) obj;
-		return age == other.age && Objects.equals(email, other.email) && Objects.equals(firsttName, other.firsttName)
-				&& Objects.equals(lastName, other.lastName)
-				&& Objects.equals(password, other.password);
-	}
-
-	
-
-	public String getFisrtName() {
-		return firsttName;
-	}
-
-	public void setFisrtName(String fisrtName) {
-		this.firsttName = fisrtName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
 
 	public String getEmail() {
 		return email;
 	}
 
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+
+	public String getFirsttName() {
+		return firsttName;
+	}
+
+
+	public void setFirsttName(String firsttName) {
+		this.firsttName = firsttName;
+	}
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+
+	public int getAge() {
+		return age;
+	}
+
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
 
 	public String getPassword() {
 		return password;
 	}
 
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+
+	public boolean getHasVoted() {
+		return HasVoted;
+	}
+
+
+	public void setHasVoted(boolean hasVoted) {
+		HasVoted = hasVoted;
+	}
+
+	
 
 
 		    

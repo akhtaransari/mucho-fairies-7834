@@ -21,9 +21,16 @@ public class Election{
     private String electionName;
     private LocalDate startDate;
     private LocalDate endDate;
-   
     @OneToMany(fetch = FetchType.EAGER)
     private List<Candidate> candidates = new ArrayList<>();
+    
+    public Election(int electionID, String electionName, LocalDate startDate, LocalDate endDate) {
+    	super();
+    	this.electionID = electionID;
+    	this.electionName = electionName;
+    	this.startDate = startDate;
+    	this.endDate = endDate;
+    }
 	
 	public Election() {
 		super();
@@ -35,13 +42,6 @@ public class Election{
 				+ ", endDate=" + endDate + ", candidates=" + candidates + "]";
 	}
 
-	public Election(int electionID, String electionName, LocalDate startDate, LocalDate endDate) {
-		super();
-		this.electionID = electionID;
-		this.electionName = electionName;
-		this.startDate = startDate;
-		this.endDate = endDate;
-	}
 
 	public Election(String electionName, LocalDate startDate, LocalDate endDate) {
 		super();

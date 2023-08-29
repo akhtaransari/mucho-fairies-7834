@@ -21,11 +21,10 @@ import com.eVotingHub.exceptions.UserMustBe18orAbove;
 import com.eVotingHub.exceptions.WrongInput;
 import com.eVotingHub.services.OnlineVotingImplements;
 
+// Its a eVotingHub User Interface Layer
 public class UI {
 	
-	
-	
-	    // ANSI escape codes for text colors
+	// ANSI escape codes for text colors
 	public static final String RESET = "\u001B[0m";
 	public static final String BLACK = "\u001B[30m";
 	public static final String RED = "\u001B[31m";
@@ -35,9 +34,11 @@ public class UI {
 	public static final String PURPLE = "\u001B[35m";
 	public static final String CYAN = "\u001B[36m";
 	public static final String WHITE = "\u001B[37m";
+	// eVotingHub Services implementations  
 	static OnlineVotingImplements onlineVotingImplements = new OnlineVotingImplements();
 	public static Scanner sc = new Scanner(System.in);
-	// Done
+	
+	// Get integer input from the user
 	public static int getIntInput() {
 	        int input = 0;
 	        boolean validInput = false;
@@ -55,7 +56,8 @@ public class UI {
 	        System.out.println();
 	        return input;
 	}
-	// Done
+	
+    // Get string input from the user
 	public static String getStringInput() {
 		System.out.print(CYAN+" Enter an "+PURPLE+"String"+RESET+" "+PURPLE+"Type: "+RESET);
 		String next = sc.next();
@@ -63,7 +65,8 @@ public class UI {
 		return next;
 
 	}
-	    
+    
+	// Main menu for the application
 	public static void mainMenu( ) {
 		int choice;
 		
@@ -96,6 +99,8 @@ public class UI {
 		
         
 	}
+	
+	// View elections from the user interface
 	private static void viewEletionsUI() {
 		try {
 			onlineVotingImplements.viewElections().forEach(System.out::println);
@@ -105,7 +110,8 @@ public class UI {
 		
 		}
 	}
-	// Done
+	
+	// Register a voter from the user/admin interface
 	private static void registerVoter( ) {
 		System.out.println("Enter firstName");
 		String fisrtName = getStringInput();
@@ -119,7 +125,8 @@ public class UI {
 		String password = getStringInput();
 		
 		try {
-			System.out.println(onlineVotingImplements.registerVoter(new Voter(fisrtName , lasttName,age, email, password)) ? "Succesfull" : "not Succesfull");
+			
+			System.out.println(onlineVotingImplements.registerVoter(new Voter(email, lasttName, lasttName, age, password)) ? "Succesfull" : "not Succesfull");
 		} catch (AccessForbidden | InvalidCredentials | NoRecordFound | UnauthorizedAccess | UserMustBe18orAbove
 				| SomeThingWentWrong | DuplicateEntry e) {
 			System.out.println(e.getMessage());
@@ -128,9 +135,10 @@ public class UI {
 			
 		
 	}
-	// Done
+	
+	// Voter login from the user interface
 	private static void voterLoginUI( ) {
-		System.out.println("Enter Username");
+		System.out.println("Enter Email");
 		String username = getStringInput();
 		System.out.println("Enter Password");
 		String password = getStringInput();
@@ -141,7 +149,8 @@ public class UI {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+    
+	// Voter menu after successful login
 	private static void voterMenu(Voter voter) {
 		int choice;
 		do {
@@ -167,7 +176,8 @@ public class UI {
 			}
 		} while (choice != 0);
 	}
-	// Done
+
+	// View voting history for a voter
 	private static void viewVotingHistoryUI(String email) {
 		
 		try {
@@ -178,9 +188,8 @@ public class UI {
 		}
 	}
 
+	// Cast a vote for a candidate
 	private static void castVote(Voter voter) {
-		
-		
 		System.out.println("Enter CandidateID");
 		int candidateID = getIntInput();
 		System.out.println("Enter electionID");
@@ -196,6 +205,7 @@ public class UI {
 		
 	}
 
+	// Confirm a vote for a voter
 	private static void voteConfirmationUI(Voter voter) {
 
 		System.out.println("Enter electionID");
@@ -210,6 +220,7 @@ public class UI {
 		
 	}
 
+    // View election results
 	private static void viewEletionResultsUI( ) {
 		System.out.println("Enter Election ID");
 		try {
@@ -219,7 +230,8 @@ public class UI {
 			System.out.println(e.getMessage());
 		}
 	}
-	// Done
+
+    // Administrator login from the user interface
 	private static void adminUI( ) {
 		System.out.println(GREEN+"╔══════════════════════════════╗");
 		System.out.println("║        Enter Username        ║");
@@ -237,7 +249,8 @@ public class UI {
 		}
 		
 	}
-	// Done
+
+    // Administrator menu after successful login
 	private static void adminMenuUI( ) {
 		int choice; 
 		
@@ -263,7 +276,8 @@ public class UI {
 		} while (choice != 0);
 				
 	}
-	// Done
+
+    // delete an election from the user interface
 	private static void deleteElectioneUI( ) {
 		System.out.println("Enter Election ID");
 		int id = getIntInput();
@@ -276,7 +290,8 @@ public class UI {
 		}
 		
 	}
-	// Done
+
+    // Update an election from the user interface
 	private static void updateElectionUI( ) {
 			System.out.println("Enter Election ID");
 			int id = getIntInput();
@@ -318,6 +333,7 @@ public class UI {
 			}	
 	}
 
+    // View candidates from the user interface
 	private static void viewCandidates() {
 		try {
 			onlineVotingImplements.viewCandidates().forEach(System.out::println);
@@ -326,7 +342,8 @@ public class UI {
 			System.out.println(e.getMessage());
 		}
 	}
-	// Done
+    
+	// Create a new election from the user interface
 	private static void createElectionUI() {
 		List<Candidate> idList = new ArrayList<>();
 		System.out.println("Eneter How Many Candidates are Participating in Election");

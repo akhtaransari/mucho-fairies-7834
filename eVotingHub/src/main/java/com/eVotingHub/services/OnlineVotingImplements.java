@@ -19,13 +19,14 @@ import com.eVotingHub.exceptions.WrongInput;
 
 public class OnlineVotingImplements implements OnlineVotingServices{
 	VotingSystemDaoImplements votingSystemImplements = new VotingSystemDaoImplements();
-	int adminLoginCounter = 0;
+	
+	int adminLoginCounter = 0; 
 	int voterLoginCounter = 0;
-
+	
+	// Registers a new voter in the system.
 	@Override
 	public boolean registerVoter(Voter voter) throws AccessForbidden, InvalidCredentials, NoRecordFound,
 			UnauthorizedAccess, UserMustBe18orAbove, SomeThingWentWrong, DuplicateEntry {
-		// TODO Auto-generated method stub
 		
 		if (voter.getAge() < 17) {
 			throw new UserMustBe18orAbove("User is Not Above 18");
@@ -33,7 +34,7 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		return votingSystemImplements.registerVoter(voter);
 		
 	}
-
+	// login method for voter 
 	@Override
 	public Voter loginVoter(String email, String password) throws AccessForbidden, InvalidCredentials,
 			MaximumLoginAttemptReached, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong {
@@ -48,14 +49,14 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		}
 		return voter;
 	}
-
+	// cast a vote 
 	@Override
 	public boolean castVote(Vote vote)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
 		if (votingSystemImplements.castVote(vote) )return true;
 		else throw new NoRecordFound("Record Not Found");
 	}
-	
+	// Admin login method
 	@Override
 	public boolean loginAdministrator(String username, String password) throws AccessForbidden, InvalidCredentials,
 			MaximumLoginAttemptReached, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
@@ -71,7 +72,8 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		}
 		
 	}
-
+	
+	// get voting confirmation based in email id for a election 
 	@Override
 	public boolean voteConfirmation(String email, int electionId)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
@@ -79,6 +81,7 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		throw new SomeThingWentWrong("Something went Wrong");
 	}
 	
+	// use of this method is to add a election along with candidates
 	@Override
 	public boolean addElection(Election election , List<Candidate> list)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
@@ -86,7 +89,8 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		throw new SomeThingWentWrong("Something went Wrong");
 		
 	}
-
+	
+	// user can view list of ongoing elections available to cast vote 
 	@Override
 	public List<Election> viewElections()
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
@@ -94,6 +98,7 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		return votingSystemImplements.viewElections();
 	}
 
+	// this method can delete election by their election id 
 	@Override
 	public boolean deleteElection(int id)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
@@ -101,6 +106,7 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		throw new SomeThingWentWrong("Something went Wrong");
 	}
 
+	// this method can update election by their election object and list of candidate   
 	@Override
 	public boolean updateElection(Election election, List<Candidate> list)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
@@ -108,21 +114,22 @@ public class OnlineVotingImplements implements OnlineVotingServices{
 		throw new SomeThingWentWrong("Something went Wrong");
 	}
 	
-	// This is pending
+	// voter can see his voting history by his email id
 	@Override
 	public List<Vote> viewVotingHistory(String emailID)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
-		return votingSystemImplements.viewVotingHistory(emailID); 
-		
+		return votingSystemImplements.viewVotingHistory(emailID); 	
 	}
-	// This is pending
+	
+	// user can see the election result by election id
 	@Override
 	public List<String> electionResult(int electionId)
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {
 		// TODO Auto-generated method stub
-		return null;
+		return votingSystemImplements.electionResult(electionId);
 	}
-
+	
+	// user can view list of available candidates
 	@Override
 	public List<Candidate> viewCandidates()
 			throws AccessForbidden, DuplicateEntry, NoRecordFound, UnauthorizedAccess, SomeThingWentWrong, WrongInput {

@@ -6,7 +6,7 @@
     <persistence-unit name="eVotingHub">
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db1" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/evotinghub" />
             <property name="jakarta.persistence.jdbc.user" value="root" />
             <property name="jakarta.persistence.jdbc.password" value="myhuge@34" />
             

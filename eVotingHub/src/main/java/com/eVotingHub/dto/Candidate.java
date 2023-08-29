@@ -3,12 +3,10 @@ package com.eVotingHub.dto;
 import 
 java.util.Objects;
 
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 
 @Entity
 public class Candidate {

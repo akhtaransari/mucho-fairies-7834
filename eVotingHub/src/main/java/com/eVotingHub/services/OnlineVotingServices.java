@@ -30,6 +30,4 @@ public interface OnlineVotingServices {
     boolean loginAdministrator(String username, String password) 	throws AccessForbidden , InvalidCredentials ,MaximumLoginAttemptReached ,NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
     boolean deleteElection(int id)									throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
     boolean updateElection(Election election,List<Candidate> list)	throws AccessForbidden ,DuplicateEntry , NoRecordFound, UnauthorizedAccess , SomeThingWentWrong , WrongInput;
-    
-
 }
